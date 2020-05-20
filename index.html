@@ -152,7 +152,7 @@
         this.y=y;
         this.dx = parseInt(Math.random()*18)-9;
         this.dy = parseInt(Math.random()*18)-9;
-        this.r = Math.random()*30;
+        this.r = Math.random()*20;
         ballarr.push(this);
     }
 
@@ -160,7 +160,7 @@
         ctx.beginPath();
         ctx.arc(this.x , this.y , this.r , 0 , Math.PI*2 , false);
         
-        ctx.fillStyle="lightblue";
+        ctx.fillStyle='rgba('+Math.random()*255+','+Math.random()*255+','+Math.random()*255+','+Math.random()+')';
         ctx.fill();
         
     }
@@ -169,12 +169,17 @@
         this.x += this.dx;
         this.y += this.dy;
         this.r--;
+        if(this.r<0){
+            this.godie()
+        }
     }
-    new Ball(300,300);
-    new Ball(300,300);
-    new Ball(300,300);
-    new Ball(300,300);
-    new Ball(300,300);
+    Ball.prototype.godie= function (){
+        for(var i=0;i<ballarr.length;i++){
+            if(ballarr[i]==this){
+                ballarr.splice(i,1);
+            }
+        }
+    }
     setInterval(() => {
         ctx.clearRect(0,0,mycanvas.width,mycanvas.height)
         for (let index = 0; index < ballarr.length; index++) {
@@ -183,5 +188,11 @@
             
         }
     }, 20);
+    mycanvas.onmousemove=function(event){
+        var event=event||window.event;
+        var x= event.pageX;
+        var y= event.pageY;
+        new Ball(x,y);
+    }
 </script>
 </html>
