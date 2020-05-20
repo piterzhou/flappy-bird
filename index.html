@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        *{
+            padding: 0;
+            margin: 0;
+        }
+        body{
+            background: black;
+        }
+        canvas{
+            border: 1px  solid gray;
+        }
+    </style>
+</head>
+<body>
+    <canvas id="mycanvas" ></canvas>
+</body>
+
+<script>
+    /** @type {HTMLCanvasElement} */
+    var mycanvas= document.getElementById("mycanvas");
+    mycanvas.width = document.documentElement.clientWidth;
+    mycanvas.height = document.documentElement.clientHeight;
+    var ctx=mycanvas.getContext("2d");
+    // ctx.fillRect(100,100,200,200)
+    
+    // ctx.fillStyle="blue";
+    // ctx.beginPath();
+    // ctx.arc(300,300,100,0,Math.PI*2,true);
+    // ctx.fill();
+    // ctx.closePath();
+    
+
+
+    // fillStyle="red";填充颜色
+    // fillRect(1,1,1,1)填充空间（矩形）
+    // strockStyle="blue"，描边颜色
+    // stroctRect(2,2,2,2);描边空间（矩形）
+
+// 一、划线，矩形，填充
+
+    // ctx.beginPath();//开始划线
+    // ctx.moveTo(100,100);//移动笔触的位置
+    // ctx.lineTo(100,200);//画虚拟的线
+    // ctx.lineTo(200,100);
+    // ctx.lineTo(300,200);
+    // ctx.lineTo(300,20);
+    // ctx.closePath();//自动封闭
+    // ctx.strokeStyle="red";//要在stroke（）方法前修改颜色，也就是实际划线前去改变
+    // ctx.lineWidth="10";
+    // ctx.lineJoin="round";
+    // ctx.stroke();//实际划线到画布上
+    // ctx.fillStyle="lightblue";//预修改填充的颜色
+    // ctx.fill();//将实际填充画在画布上
+    // //如果最后直接使用fill（），而不使用closePath（），形状会自动封闭，但是最后闭合的那条线则没有，也就是说图形是封闭的，但是描边不封闭的。
+
+
+// 二、弧线和圆形
+
+    // ctx.beginPath();
+    // ctx.arc(200,200,100,0,2*Math.PI,true);
+    // ctx.stroke();
+
+    // ctx.beginPath();
+    // ctx.arc(160,150,20,0,2*Math.PI,true);
+    // ctx.stroke()
+
+    // ctx.beginPath();
+    // ctx.arc(240,150,20,0,2*Math.PI,true);
+    // ctx.stroke()
+
+    // ctx.beginPath();
+    // ctx.arc(200,200,60,1,2,false);
+    // ctx.stroke()
+
+// 三、贝赛尔曲线
+    // ctx.beginPath();
+    // ctx.moveTo(100,100);
+    // ctx.quadraticCurveTo(200,0,400,400);
+    // ctx.stroke()
+
+    // ctx.beginPath();
+    // ctx.moveTo(100,100);
+    // ctx.bezierCurveTo(200,0,300,600,400,400);
+    // ctx.stroke()
+
+
+    // 四、运动
+    // let x=100;
+    // setInterval(() => {
+    //     x++;
+    //     ctx.clearRect(0,0,400,400);//清楚一个矩形区域，起始xy左边，矩形的宽高
+    //     ctx.beginPath();
+    //     ctx.arc(x,100,40,0,Math.PI*2,false);
+    //     ctx.closePath();
+    //     ctx.fillStyle="lightblue";
+    //     ctx.fill();
+    // }, 20);
+    // clearInterval()
+
+    // 五、面向对象编写
+    
+    // //小球数组
+    // let ballarr=[];
+    // //帧编号
+    // let fno=0;
+    // // 构造函数
+    // function Ball(x,y,r,speed){
+    //     this.x=x;
+    //     this.y=y;
+    //     this.r=r;
+    //     this.speed=speed;
+    //     ballarr.push(this);
+    // }
+    // //渲染小球的方法
+    // Ball.prototype.runder=function(){
+    //     ctx.beginPath();
+    //     ctx.arc(this.x,this.y,this.r,0,Math.PI*2,false);
+    //     ctx.stroke();
+    //     ctx.fill();
+    // }
+    // // 小球移动的方法
+    // Ball.prototype.update=function(){
+    //     this.x+= this.speed;
+    // }
+
+
+    // //唯一的一个定时器
+    // setInterval(() => {
+    //     fno++;
+
+    //     //清屏
+    //     ctx.clearRect(0,0,600,600);
+    //     // ctx.fillText(fno,10,10);
+    //     for(let i=0;i<ballarr.length;i++){
+    //         ballarr[i].update();
+    //         ballarr[i].runder();
+    //     }
+    // }, 50);
+    
+
+    // 六、跟随鼠标移动的炫彩小球
+    
+    let ballarr= [];
+    function Ball (x,y){
+        this.x=x;
+        this.y=y;
+        this.dx = parseInt(Math.random()*18)-9;
+        this.dy = parseInt(Math.random()*18)-9;
+        this.r = Math.random()*30;
+        ballarr.push(this);
+    }
+
+    Ball.prototype.runder=function(){
+        ctx.beginPath();
+        ctx.arc(this.x , this.y , this.r , 0 , Math.PI*2 , false);
+        
+        ctx.fillStyle="lightblue";
+        ctx.fill();
+        
+    }
+    Ball.prototype.update=function(){
+       
+        this.x += this.dx;
+        this.y += this.dy;
+        this.r--;
+    }
+    new Ball(300,300);
+    new Ball(300,300);
+    new Ball(300,300);
+    new Ball(300,300);
+    new Ball(300,300);
+    setInterval(() => {
+        ctx.clearRect(0,0,mycanvas.width,mycanvas.height)
+        for (let index = 0; index < ballarr.length; index++) {
+            ballarr[index].runder();
+            ballarr[index].update();
+            
+        }
+    }, 20);
+</script>
+</html>
